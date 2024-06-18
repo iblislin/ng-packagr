@@ -11,6 +11,7 @@ import { Node } from '../graph/node';
 import { EntryPointNode, fileUrl } from '../ng-package/nodes';
 import { StylesheetProcessor } from '../styles/stylesheet-processor';
 import { ensureUnixPath } from '../utils/path';
+import { pugProcessor } from '../styles/pug-processor';
 
 export function cacheCompilerHost(
   graph: BuildGraph,
@@ -198,6 +199,8 @@ export function cacheCompilerHost(
         if (/(?:html?|svg)$/.test(path.extname(fileName))) {
           // template
           cache.content = compilerHost.readFile.call(this, fileName);
+        } else if (/(pug|jade)$/.test(path.extname(fileName))) {
+          cache.content = pugProcessor(fileName, cache.content);
         } else {
           // stylesheet
           cache.content = await stylesheetProcessor.process({
