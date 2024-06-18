@@ -159,6 +159,7 @@ async function renderCss(filePath: string, css: string): Promise<string> {
         await import('less')
       ).default.render(css, {
         filename: filePath,
+        math: 'always',
         javascriptEnabled: true,
         paths: styleIncludePaths,
       });
